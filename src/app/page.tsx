@@ -125,8 +125,6 @@ export default function Home() {
             const centerY = 300; // half of container height (600px)
             const x = radius * Math.cos(angle);
             const y = radius * Math.sin(angle);
-            const targetX = centerX + x;
-            const targetY = centerY + y;
 
             // Line Styles
             const lineStyle = {
