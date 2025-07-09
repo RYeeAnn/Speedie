@@ -1,103 +1,187 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+
+const features = [
+  {
+    label: "🚨 Warning Lights",
+    href: "/pages/WarningLightsPage",
+    active: true,
+    color: "bg-red-400",
+  },
+  {
+    label: "🧠 Ask Speedy AI (Soon)",
+    href: "#",
+    active: false,
+    color: "bg-purple-400",
+  },
+  {
+    label: "🔧 Maintenance Tips (Soon)",
+    href: "#",
+    active: false,
+    color: "bg-green-400",
+  },
+  {
+    label: "📅 Service Scheduler (Soon)",
+    href: "#",
+    active: false,
+    color: "bg-blue-400",
+  },
+  {
+    label: "📊 Mileage Tracker (Soon)",
+    href: "#",
+    active: false,
+    color: "bg-pink-400",
+  },
+  {
+    label: "🔍 Find a Mechanic (Soon)",
+    href: "#",
+    active: false,
+    color: "bg-yellow-400",
+  },
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [isMobile, setIsMobile] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <main className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-yellow-50 to-white text-center px-4 relative pt-12 pb-16 overflow-hidden">
+      {/* Mobile Layout */}
+      {isMobile ? (
+        <>
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="w-32 h-32 md:w-40 md:h-40 mb-8"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div className="relative w-full h-full">
+              <img
+                src="/subie.jpg"
+                alt="Speedie Logo"
+                className="w-full h-full rounded-full object-cover border-4 border-yellow-300 shadow-[0_10px_25px_rgba(0,0,0,0.1)]"
+              />
+              <div className="absolute inset-0 rounded-full ring-2 ring-yellow-200 animate-pulse pointer-events-none" />
+            </div>
+          </motion.div>
+
+          {/* Stack Buttons */}
+          <div className="flex flex-col items-center gap-3 w-full max-w-xs">
+            {features.map((feature, i) =>
+              feature.active ? (
+                <Link href={feature.href} key={i}>
+                  <button className={`w-full px-6 py-3 ${feature.color} text-white text-sm font-semibold rounded-full shadow-md hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition-all duration-300`}>
+                    {feature.label}
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  key={i}
+                  className={`w-full px-6 py-3 ${feature.color} text-white text-sm font-semibold rounded-full shadow-md cursor-not-allowed opacity-60`}
+                >
+                  {feature.label}
+                </button>
+              )
+            )}
+          </div>
+        </>
+      ) : (
+        // Desktop & Tablet Layout
+        <div className="relative w-full max-w-[600px] h-[600px] flex items-center justify-center">
+          {/* Center Logo */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="absolute z-10 w-40 h-40"
           >
-            Read our docs
-          </a>
+            <div className="relative w-full h-full">
+              <img
+                src="/subie.jpg"
+                alt="Speedy Logo"
+                className="w-full h-full rounded-full object-cover border-4 border-yellow-300 shadow-[0_10px_25px_rgba(0,0,0,0.1)]"
+              />
+              <div className="absolute inset-0 rounded-full ring-2 ring-yellow-200 animate-pulse pointer-events-none" />
+            </div>
+          </motion.div>
+
+          {/* Lines and Radial Buttons */}
+          {features.map((feature, i) => {
+            const angle = (2 * Math.PI * i) / features.length;
+            const radius = 200;
+            const centerX = 300; // half of container width (600px)
+            const centerY = 300; // half of container height (600px)
+            const x = radius * Math.cos(angle);
+            const y = radius * Math.sin(angle);
+            const targetX = centerX + x;
+            const targetY = centerY + y;
+
+            // Line Styles
+            const lineStyle = {
+              left: `${centerX}px`,
+              top: `${centerY}px`,
+              width: `${radius}px`,
+              transform: `rotate(${(angle * 180) / Math.PI}deg)`,
+              transformOrigin: "0 50%",
+            };
+
+            const buttonStyle = {
+              left: `calc(50% + ${x}px - 90px)`,
+              top: `calc(50% + ${y}px - 20px)`,
+              width: "180px",
+            };
+
+            const base =
+              "absolute px-4 py-2 rounded-full text-sm font-semibold shadow-md transition-all duration-300";
+
+            return (
+              <div key={i}>
+                {/* Line from center to button */}
+                <div
+                  className="absolute h-1 bg-gray-300 z-0"
+                  style={lineStyle}
+                />
+
+                {/* Button */}
+                {feature.active ? (
+                  <Link href={feature.href}>
+                    <button
+                      className={`${base} ${feature.color} text-white hover:brightness-110 z-10`}
+                      style={buttonStyle}
+                    >
+                      {feature.label}
+                    </button>
+                  </Link>
+                ) : (
+                  <button
+                    className={`${base} ${feature.color} text-white opacity-60 cursor-not-allowed z-10`}
+                    style={buttonStyle}
+                  >
+                    {feature.label}
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      )}
+
+      {/* Footer */}
+      <div className="absolute bottom-4 text-xs text-gray-400 italic">
+        Developed by Ryan Yee
+      </div>
+    </main>
   );
 }
