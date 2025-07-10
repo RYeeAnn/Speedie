@@ -45,6 +45,11 @@ const features = [
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -55,12 +60,13 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  if (!hasMounted) return null;
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-yellow-50 to-white text-center px-4 relative pt-12 pb-16 overflow-hidden">
       {/* Mobile Layout */}
       {isMobile ? (
         <>
-          {/* Logo and Title */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -79,7 +85,6 @@ export default function Home() {
 
           <h1 className="text-3xl font-bold text-yellow-500 mb-6">Speedie</h1>
 
-          {/* Stack Buttons */}
           <div className="flex flex-col items-center gap-3 w-full max-w-xs">
             {features.map((feature, i) =>
               feature.active ? (
@@ -102,7 +107,6 @@ export default function Home() {
       ) : (
         // Desktop & Tablet Layout
         <div className="relative w-full max-w-[600px] h-[600px] flex items-center justify-center">
-          {/* Center Logo and Title */}
           <div className="absolute z-10 flex flex-col items-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -122,12 +126,11 @@ export default function Home() {
             <h1 className="text-3xl font-bold text-yellow-500">Speedie</h1>
           </div>
 
-          {/* Lines and Radial Buttons */}
           {features.map((feature, i) => {
             const angle = (2 * Math.PI * i) / features.length;
             const radius = 200;
-            const centerX = 300; // half of container width (600px)
-            const centerY = 300; // half of container height (600px)
+            const centerX = 300;
+            const centerY = 300;
             const x = radius * Math.cos(angle);
             const y = radius * Math.sin(angle);
 
@@ -145,18 +148,11 @@ export default function Home() {
               width: "180px",
             };
 
-            const base =
-              "absolute px-4 py-2 rounded-full text-sm font-semibold shadow-md transition-all duration-300";
+            const base = "absolute px-4 py-2 rounded-full text-sm font-semibold shadow-md transition-all duration-300";
 
             return (
               <div key={i}>
-                {/* Line from center to button */}
-                <div
-                  className="absolute h-1 bg-gray-300 z-0"
-                  style={lineStyle}
-                />
-
-                {/* Button */}
+                <div className="absolute h-1 bg-gray-300 z-0" style={lineStyle} />
                 {feature.active ? (
                   <Link href={feature.href}>
                     <button
@@ -180,7 +176,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Footer */}
       <div className="absolute bottom-4 text-xs text-gray-400 italic">
         Developed by Ryan Yee
       </div>
