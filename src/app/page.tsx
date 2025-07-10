@@ -60,12 +60,12 @@ export default function Home() {
       {/* Mobile Layout */}
       {isMobile ? (
         <>
-          {/* Logo */}
+          {/* Logo and Title */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="w-32 h-32 md:w-40 md:h-40 mb-8"
+            className="w-32 h-32 md:w-40 md:h-40 mb-4"
           >
             <div className="relative w-full h-full">
               <img
@@ -76,6 +76,8 @@ export default function Home() {
               <div className="absolute inset-0 rounded-full ring-2 ring-yellow-200 animate-pulse pointer-events-none" />
             </div>
           </motion.div>
+
+          <h1 className="text-3xl font-bold text-yellow-500 mb-6">Speedie</h1>
 
           {/* Stack Buttons */}
           <div className="flex flex-col items-center gap-3 w-full max-w-xs">
@@ -100,22 +102,25 @@ export default function Home() {
       ) : (
         // Desktop & Tablet Layout
         <div className="relative w-full max-w-[600px] h-[600px] flex items-center justify-center">
-          {/* Center Logo */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="absolute z-10 w-40 h-40"
-          >
-            <div className="relative w-full h-full">
-              <img
-                src="/subie.jpg"
-                alt="Speedy Logo"
-                className="w-full h-full rounded-full object-cover border-4 border-yellow-300 shadow-[0_10px_25px_rgba(0,0,0,0.1)]"
-              />
-              <div className="absolute inset-0 rounded-full ring-2 ring-yellow-200 animate-pulse pointer-events-none" />
-            </div>
-          </motion.div>
+          {/* Center Logo and Title */}
+          <div className="absolute z-10 flex flex-col items-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="w-40 h-40 mb-2"
+            >
+              <div className="relative w-full h-full">
+                <img
+                  src="/subie.jpg"
+                  alt="Speedy Logo"
+                  className="w-full h-full rounded-full object-cover border-4 border-yellow-300 shadow-[0_10px_25px_rgba(0,0,0,0.1)]"
+                />
+                <div className="absolute inset-0 rounded-full ring-2 ring-yellow-200 animate-pulse pointer-events-none" />
+              </div>
+            </motion.div>
+            <h1 className="text-3xl font-bold text-yellow-500">Speedie</h1>
+          </div>
 
           {/* Lines and Radial Buttons */}
           {features.map((feature, i) => {
@@ -126,7 +131,6 @@ export default function Home() {
             const x = radius * Math.cos(angle);
             const y = radius * Math.sin(angle);
 
-            // Line Styles
             const lineStyle = {
               left: `${centerX}px`,
               top: `${centerY}px`,
