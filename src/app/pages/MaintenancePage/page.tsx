@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
+import Link from "next/link";
 
 type Tip = {
   title: string;
@@ -69,6 +70,19 @@ export default function MaintenancePage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-white text-gray-900 py-10 px-4 md:px-12">
+
+      {/* Back button */}
+      <div className="mb-4">
+        <Link href="/" passHref>
+          <button
+            className="flex items-center gap-1 text-sm text-gray-600 hover:text-black transition"
+            aria-label="Go back to home"
+          >
+            ← Back
+          </button>
+        </Link>
+      </div>
+
       <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-yellow-600">
         🧰 Maintenance Tips
       </h1>

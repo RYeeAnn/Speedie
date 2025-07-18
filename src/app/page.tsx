@@ -30,9 +30,9 @@ const features = [
     color: "bg-blue-400",
   },
   {
-    label: "📊 Mileage Tracker (Soon)",
-    href: "#",
-    active: false,
+    label: "📊 Mileage Tracker",
+    href: "/pages/MileagePage",
+    active: true,
     color: "bg-pink-400",
   },
   {
