@@ -209,7 +209,7 @@ export default function WarningLightsPage() {
     const [activeTab, setActiveTab] = useState("Meaning");
 
   return (
-    <main className="min-h-screen px-4 py-6 bg-white relative">
+    <main className="min-h-screen px-4 py-6 bg-gradient-to-b from-yellow-50 to-white relative">
       {/* Back button */}
       <div className="mb-4">
         <Link href="/" passHref>

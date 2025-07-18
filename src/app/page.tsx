@@ -18,9 +18,9 @@ const features = [
     color: "bg-purple-400",
   },
   {
-    label: "🔧 Maintenance Tips (Soon)",
-    href: "#",
-    active: false,
+    label: "🔧 Maintenance Tips",
+    href: "/pages/MaintenancePage",
+    active: true,
     color: "bg-green-400",
   },
   {
