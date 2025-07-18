@@ -36,9 +36,9 @@ const features = [
     color: "bg-pink-400",
   },
   {
-    label: "🔍 Find a Mechanic (Soon)",
-    href: "#",
-    active: false,
+    label: "🔍 Find a Mechanic",
+    href: "/pages/FindAMechanicPage",
+    active: true,
     color: "bg-yellow-400",
   },
 ];
