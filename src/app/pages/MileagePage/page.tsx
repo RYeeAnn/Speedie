@@ -83,18 +83,12 @@ export default function MileagePage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-white px-4 py-12 text-gray-900">
-
+    <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-white py-10 px-6 text-gray-900 relative">
       {/* Back button */}
-      <div className="mb-4">
-        <Link href="/" passHref>
-          <button
-            className="flex items-center gap-1 text-sm text-gray-600 hover:text-black transition"
-            aria-label="Go back to home"
-          >
-            ← Back
-          </button>
-        </Link>
+      <div className="absolute top-4 left-4 z-10">
+        <a href="/" className="flex items-center gap-1 text-sm text-gray-600 hover:text-black transition bg-white/80 px-2 py-1 rounded shadow" aria-label="Go back to home">
+          ← Back
+        </a>
       </div>
 
       <div className="max-w-3xl mx-auto">

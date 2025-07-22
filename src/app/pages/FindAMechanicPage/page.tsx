@@ -108,7 +108,13 @@ export default function FindMechanicPage() {
   });
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-white py-10 px-6 text-gray-900">
+    <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-white py-10 px-6 text-gray-900 relative">
+      {/* Back button */}
+      <div className="absolute top-4 left-4 z-10">
+        <a href="/" className="flex items-center gap-1 text-sm text-gray-600 hover:text-black transition bg-white/80 px-2 py-1 rounded shadow" aria-label="Go back to home">
+          ← Back
+        </a>
+      </div>
       <h1 className="text-4xl font-bold text-yellow-500 text-center mb-8">🔍 Find a Mechanic</h1>
 
       <div className="flex flex-wrap justify-center gap-3 mb-4">
