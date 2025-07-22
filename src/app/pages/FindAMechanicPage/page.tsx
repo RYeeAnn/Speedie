@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import Link from "next/link";
 
 const libraries: ("places")[] = ["places"];
 
@@ -33,25 +34,6 @@ export default function FindMechanicPage() {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
     libraries,
   });
-
-  useEffect(() => {
-    if (!isLoaded) return;
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        setUserLocation({ lat: latitude, lng: longitude });
-        fetchMechanics(latitude, longitude);
-      },
-      (err) => {
-        console.warn("Geolocation failed:", err);
-        const fallbackLat = 49.2827;
-        const fallbackLng = -123.1207;
-        setUserLocation({ lat: fallbackLat, lng: fallbackLng });
-        fetchMechanics(fallbackLat, fallbackLng);
-      }
-    );
-  }, [isLoaded]);
 
   const fetchMechanics = async (lat: number, lng: number) => {
     if (!window.google || !google.maps) return;
@@ -107,13 +89,32 @@ export default function FindMechanicPage() {
     return matchesServices && matchesCity;
   });
 
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+        fetchMechanics(latitude, longitude);
+      },
+      (err) => {
+        console.warn("Geolocation failed:", err);
+        const fallbackLat = 49.2827;
+        const fallbackLng = -123.1207;
+        setUserLocation({ lat: fallbackLat, lng: fallbackLng });
+        fetchMechanics(fallbackLat, fallbackLng);
+      }
+    );
+  }, [isLoaded, fetchMechanics]);
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-white py-10 px-6 text-gray-900 relative">
       {/* Back button */}
       <div className="absolute top-4 left-4 z-10">
-        <a href="/" className="flex items-center gap-1 text-sm text-gray-600 hover:text-black transition bg-white/80 px-2 py-1 rounded shadow" aria-label="Go back to home">
+        <Link href="/" className="flex items-center gap-1 text-sm text-gray-600 hover:text-black transition bg-white/80 px-2 py-1 rounded shadow" aria-label="Go back to home">
           ← Back
-        </a>
+        </Link>
       </div>
       <h1 className="text-4xl font-bold text-yellow-500 text-center mb-8">🔍 Find a Mechanic</h1>
 
