@@ -20,12 +20,11 @@ type Mechanic = {
   phone?: string;
   rating?: number;
   city?: string;
-  services: string[]; // local mapping for dummy filter tags
+  // services: string[]; // Remove this line
 };
 
 export default function FindMechanicPage() {
   const [mechanics, setMechanics] = useState<Mechanic[]>([]);
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedCity, setSelectedCity] = useState<string>("All");
   const [cities, setCities] = useState<string[]>([]);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -34,6 +33,25 @@ export default function FindMechanicPage() {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
     libraries,
   });
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+        fetchMechanics(latitude, longitude);
+      },
+      (err) => {
+        console.warn("Geolocation failed:", err);
+        const fallbackLat = 49.2827;
+        const fallbackLng = -123.1207;
+        setUserLocation({ lat: fallbackLat, lng: fallbackLng });
+        fetchMechanics(fallbackLat, fallbackLng);
+      }
+    );
+  }, [isLoaded]);
 
   const fetchMechanics = async (lat: number, lng: number) => {
     if (!window.google || !google.maps) return;
@@ -59,7 +77,7 @@ export default function FindMechanicPage() {
           phone: "",
           rating: place.rating ?? 0,
           city: cityComponent,
-          services: assignRandomServices(),
+          // services: assignRandomServices(), // Remove this line
         };
       });      
 
@@ -71,42 +89,12 @@ export default function FindMechanicPage() {
     });
   };
 
-  const assignRandomServices = (): string[] => {
-    const all = ["oil", "brakes", "tires"];
-    return all.filter(() => Math.random() > 0.4); // randomly assign
-  };
-
-  const toggleService = (service: string) => {
-    setSelectedServices((prev) =>
-      prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service]
-    );
-  };
+  // Remove assignRandomServices function
 
   const filteredMechanics = mechanics.filter((m) => {
-    const matchesServices =
-      selectedServices.length === 0 || selectedServices.every((s) => m.services.includes(s));
     const matchesCity = selectedCity === "All" || m.city === selectedCity;
-    return matchesServices && matchesCity;
+    return matchesCity;
   });
-
-  useEffect(() => {
-    if (!isLoaded) return;
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        setUserLocation({ lat: latitude, lng: longitude });
-        fetchMechanics(latitude, longitude);
-      },
-      (err) => {
-        console.warn("Geolocation failed:", err);
-        const fallbackLat = 49.2827;
-        const fallbackLng = -123.1207;
-        setUserLocation({ lat: fallbackLat, lng: fallbackLng });
-        fetchMechanics(fallbackLat, fallbackLng);
-      }
-    );
-  }, [isLoaded, fetchMechanics]);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-white py-10 px-6 text-gray-900 relative">
@@ -118,23 +106,7 @@ export default function FindMechanicPage() {
       </div>
       <h1 className="text-4xl font-bold text-yellow-500 text-center mb-8">🔍 Find a Mechanic</h1>
 
-      <div className="flex flex-wrap justify-center gap-3 mb-4">
-        {["oil", "brakes", "tires"].map((s) => (
-          <button
-            key={s}
-            onClick={() => toggleService(s)}
-            className={`px-4 py-2 rounded-full font-medium border ${
-              selectedServices.includes(s)
-                ? "bg-yellow-400 text-white border-yellow-400"
-                : "bg-white border-gray-300 text-gray-800"
-            } transition`}
-          >
-            {s === "oil" && "🛢️ Oil Change"}
-            {s === "brakes" && "🧯 Brakes"}
-            {s === "tires" && "🛞 Tires"}
-          </button>
-        ))}
-      </div>
+      {/* Remove filter buttons for oil, brakes, tires */}
 
       {cities.length > 0 && (
         <div className="flex justify-center mb-6">
@@ -168,9 +140,7 @@ export default function FindMechanicPage() {
           >
             <h2 className="font-bold text-lg">{m.name}</h2>
             <p className="text-sm">{m.address}</p>
-            <p className="text-sm text-gray-500">
-              Services: {m.services.join(", ")}
-            </p>
+            {/* Remove Services line */}
             {m.rating && (
               <p className="text-sm text-yellow-600">⭐ Rating: {m.rating.toFixed(1)}</p>
             )}

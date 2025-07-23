@@ -118,21 +118,9 @@ export default function MaintenancePage() {
             )}
           >
             <div className="flex items-center justify-between gap-3">
-              <h2 className={"font-semibold text-lg"}>
-                {tip.title}
-              </h2>
+              <h2 className={"font-semibold text-lg"}>{tip.title}</h2>
             </div>
             <p className="mt-2 text-sm text-gray-700">{tip.description}</p>
-            {tip.link && (
-              <Link
-                href={tip.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-yellow-600 mt-2 inline-block hover:underline"
-              >
-                Learn more →
-              </Link>
-            )}
           </motion.div>
         ))}
       </div>

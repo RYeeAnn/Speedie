@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { allWarningLights, WarningLight } from "./allWarningLights";
+import { clsx } from "clsx";
 
 const severityColor = {
     info: "text-blue-500",
@@ -40,30 +41,33 @@ export default function WarningLightsPage() {
         Tap a light to learn what it means and how urgent it is.
       </p>
 
-      {/* Search and Filter */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+      {/* Filter Tabs */}
+      <div className="flex flex-wrap justify-center gap-3 mb-6">
+        {["info", "warning", "critical"].map((sev) => (
+          <button
+            key={sev}
+            onClick={() => setSeverityFilter(severityFilter === sev ? null : sev)}
+            className={clsx(
+              "px-4 py-2 rounded-full border text-sm font-medium transition",
+              severityFilter === sev
+                ? "bg-yellow-500 text-white border-yellow-500"
+                : "bg-white text-gray-700 border-gray-300 hover:bg-yellow-100"
+            )}
+          >
+            {sev.charAt(0).toUpperCase() + sev.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {/* Search Bar */}
+      <div className="max-w-xl mx-auto mb-8">
         <input
           type="text"
-          placeholder="Search warning lights..."
+          placeholder="🔍 Search warning lights..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border px-4 py-2 rounded shadow-sm w-full sm:w-64 bg-white placeholder-black text-black text-sm placeholder:text-sm"
+          className="w-full border border-yellow-300 rounded-lg px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-gray-400 text-black"
         />
-        <div className="flex gap-2 mt-2 sm:mt-0">
-          {["info", "warning", "critical"].map((sev) => (
-            <button
-              key={sev}
-              onClick={() => setSeverityFilter(severityFilter === sev ? null : sev)}
-              className={`px-3 py-1 rounded-full border text-sm font-medium transition ${
-                severityFilter === sev
-                  ? `${severityColor[sev as keyof typeof severityColor]} bg-yellow-100 border-yellow-400`
-                  : "border-gray-300 text-gray-600 bg-white"
-              }`}
-            >
-              {sev.charAt(0).toUpperCase() + sev.slice(1)}
-            </button>
-          ))}
-        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
