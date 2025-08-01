@@ -143,20 +143,7 @@ export default function WarningLightsPage() {
                 <div className="text-sm text-gray-600 text-center">
                 {activeTab === "Meaning" && <p>{selectedLight.description}</p>}
                 {activeTab === "Urgency" && <p>{selectedLight.urgency}</p>}
-                {activeTab === "Fix Info" && (
-                    <>
-                    <p>{selectedLight.fixInfo}</p>
-                    {selectedLight.videoUrl && (
-                        <a
-                        href={selectedLight.videoUrl}
-                        target="_blank"
-                        className="text-blue-600 underline block mt-2"
-                        >
-                        Watch a Video
-                        </a>
-                    )}
-                    </>
-                )}
+                {activeTab === "Fix Info" && <p>{selectedLight.fixInfo}</p>}
                 </div>
             </div>
             </motion.div>
