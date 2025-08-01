@@ -8,9 +8,6 @@ export type WarningLight = {
   fixInfo: string;
 };
 
-// Placeholder image for icons not present in /public
-const PLACEHOLDER = "/warning-placeholder.png";
-
 export const allWarningLights: WarningLight[] = [
   // --- Original warning lights (with icons/info) ---
   {
