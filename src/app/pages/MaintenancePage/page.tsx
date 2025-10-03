@@ -1,129 +1,196 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import clsx from "clsx";
-import Link from "next/link";
 
-type Tip = {
-  title: string;
-  description: string;
-  category: string;
-  link?: string;
+const Icon = ({ name, className = "w-5 h-5" }: { name: string; className?: string }) => {
+  const icons = {
+    dashboard: (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+      </svg>
+    ),
+    warning: (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+      </svg>
+    ),
+    wrench: (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    ),
+    chart: (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg>
+    ),
+    search: (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    ),
+  };
+  return icons[name as keyof typeof icons] || null;
 };
 
-const maintenanceTips: Tip[] = [
-  { title: "🛢️ Oil Change", category: "Engine", description: "Change your engine oil every 5,000–7,500 km (or as recommended by your manufacturer). Use the correct oil type and viscosity. Warm up the engine, drain the old oil, replace the oil filter, and fill with new oil to the proper level. Check for leaks after starting the engine.", link: "https://www.consumerreports.org/cars/car-maintenance/oil-change-intervals-a1068897194/" },
-  { title: "🔋 Battery Check", category: "Electrical", description: "Inspect the battery terminals for corrosion and ensure connections are tight. Clean terminals with a wire brush and baking soda solution if needed. Test battery voltage regularly and replace if it struggles to start your car." },
-  { title: "💨 Tire Pressure", category: "Tires", description: "Check tire pressure monthly and before long trips using a reliable gauge. Inflate tires to the recommended PSI (found on the driver’s door jamb or manual). Don’t forget the spare! Under- or over-inflated tires wear unevenly and reduce safety." },
-  { title: "🧼 Air Filter", category: "Engine", description: "Replace the engine air filter every 12,000–15,000 km or yearly. Remove the old filter and install a new one in the airbox. A clean filter improves fuel economy and engine life." },
-  { title: "🧯 Brake Inspection", category: "Brakes", description: "Inspect brake pads, rotors, and fluid annually or if you hear squeaking/grinding. Replace pads if worn below 3mm. Check fluid level and top up with the correct type if low. Have a mechanic inspect for leaks or uneven wear." },
-  { title: "💡 Lights Check", category: "Electrical", description: "Test all exterior and interior lights monthly. Replace burnt-out bulbs promptly. Clean lenses for maximum visibility. Check brake, turn, and hazard lights with a helper or by reflection." },
-  { title: "🧊 Coolant Level", category: "Fluids", description: "Check coolant level in the reservoir when the engine is cold. Top up with the correct coolant mix if low. Inspect hoses for leaks or cracks. Flush and replace coolant as per your manual (usually every 2–5 years)." },
-  { title: "⚙️ Transmission Fluid", category: "Fluids", description: "Check automatic transmission fluid with the engine running and warm (if your car has a dipstick). Fluid should be pinkish and not smell burnt. Change fluid and filter every 50,000–100,000 km or as recommended." },
-  { title: "🪫 Alternator Health", category: "Electrical", description: "If you notice dimming lights or slow cranking, have your alternator tested. Listen for whining noises. Replace the alternator if it fails to charge the battery properly." },
-  { title: "🧽 Windshield Wipers", category: "Visibility", description: "Replace wiper blades every 6–12 months or if they streak/chatter. Clean the windshield and blades regularly. Top up washer fluid with a proper solution, not just water." },
-  { title: "🛠️ Spark Plugs", category: "Engine", description: "Replace spark plugs every 30,000–50,000 km (copper) or up to 160,000 km (iridium/platinum). Use the correct gap and torque. Bad plugs cause misfires, poor fuel economy, and hard starts." },
-  { title: "🔧 Timing Belt", category: "Engine", description: "Replace the timing belt between 96,000–160,000 km or as specified. A failed belt can destroy your engine. Have a mechanic inspect for cracks or wear if unsure." },
-  { title: "🧼 Cabin Air Filter", category: "Comfort", description: "Replace the cabin air filter yearly or if airflow is weak. Usually located behind the glove box. A clean filter improves air quality and HVAC performance." },
-  { title: "🛞 Wheel Alignment", category: "Tires", description: "Check alignment yearly or if the car pulls to one side. Misalignment causes uneven tire wear and poor handling. Have a shop adjust toe, camber, and caster as needed." },
-  { title: "🛠️ Fuel System", category: "Engine", description: "Use quality fuel and add a fuel system cleaner every 10,000–20,000 km. Replace the fuel filter as recommended. Clean injectors if you notice rough idling or hesitation." },
-  { title: "🧰 Power Steering Fluid", category: "Fluids", description: "Check power steering fluid level monthly. Top up with the correct fluid if low. If you hear whining or feel heavy steering, have the system checked for leaks." },
-  { title: "🧯 Emergency Kit", category: "Safety", description: "Keep a kit with jumper cables, flashlight, first aid, water, and basic tools in your car. Check and refresh supplies every 6 months. Store in an accessible location." },
-  { title: "📆 Scheduled Service", category: "General", description: "Follow your car’s factory service schedule for oil, filters, fluids, and inspections. Log all maintenance in a notebook or app. Regular service prevents breakdowns and preserves value." },
-  { title: "🧊 AC System Check", category: "Comfort", description: "Test your AC before hot weather. If cooling is weak, check refrigerant level and inspect for leaks. Run the AC for 10 minutes monthly, even in winter, to keep seals lubricated." },
-  { title: "🪞 Mirrors & Windows", category: "Visibility", description: "Clean mirrors and windows inside and out with glass cleaner. Repair chips or cracks promptly. Adjust mirrors for maximum rear and side visibility before driving." },
-  { title: "🪛 Lug Nuts Torque", category: "Tires", description: "After wheel service, re-torque lug nuts to the correct spec after 50–100 km. Use a torque wrench, not an impact gun. Prevents wheel loss and uneven brake rotor wear." },
-  { title: "🛢️ Differential Fluid", category: "Fluids", description: "Change differential fluid for AWD/4WD vehicles as per the manual (often every 50,000–100,000 km). Use the correct type and check for leaks at the seals." },
-  { title: "🔌 Battery Terminals", category: "Electrical", description: "Clean battery terminals with a wire brush and baking soda solution. Apply dielectric grease to prevent corrosion. Check for tight, secure connections." },
-  { title: "🛠️ Underbody Wash", category: "General", description: "Wash the undercarriage after winter or off-roading to remove salt, mud, and debris. Prevents rust and corrosion. Use a hose or drive-through car wash with underbody spray." },
-  { title: "🔒 Lock Lubrication", category: "General", description: "Lubricate door locks, hinges, and latches with silicone spray or graphite powder every 6 months. Prevents sticking and wear." },
+const sidebarItems = [
+  { id: "dashboard", label: "Dashboard", icon: "dashboard", href: "/", active: false },
+  { id: "warning-lights", label: "Warning Lights", icon: "warning", href: "/pages/WarningLightsPage", active: false },
+  { id: "maintenance", label: "Maintenance", icon: "wrench", href: "/pages/MaintenancePage", active: true },
+  { id: "mileage", label: "Mileage", icon: "chart", href: "/pages/MileagePage", active: false },
+  { id: "mechanic", label: "Find Mechanic", icon: "search", href: "/pages/FindAMechanicPage", active: false },
 ];
 
-const categories = ["All", ...new Set(maintenanceTips.map(t => t.category))];
-
 export default function MaintenancePage() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [search, setSearch] = useState("");
-
-  const filteredTips = maintenanceTips.filter(
-    tip =>
-      (selectedCategory === "All" || tip.category === selectedCategory) &&
-      tip.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-white py-10 px-6 text-gray-900 relative">
-      {/* Back button */}
-      <div className="absolute top-4 left-4 z-10">
-        <Link href="/" className="flex items-center gap-1 text-sm text-gray-600 hover:text-black transition bg-white/80 px-2 py-1 rounded shadow" aria-label="Go back to home">
-          ← Back
-        </Link>
-      </div>
-
-      <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-yellow-600">
-        🧰 Maintenance Tips
-      </h1>
-
-      {/* Filters */}
-      <div className="flex flex-wrap justify-center gap-3 mb-6">
-        {categories.map(cat => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={clsx(
-              "px-4 py-2 rounded-full border text-sm font-medium transition",
-              selectedCategory === cat
-                ? "bg-yellow-500 text-white border-yellow-500"
-                : "bg-white text-gray-700 border-gray-300 hover:bg-yellow-100"
-            )}
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black bg-opacity-50" 
+            onClick={() => setMobileMenuOpen(false)}
+          ></motion.div>
+          <motion.div 
+            initial={{ x: -300 }}
+            animate={{ x: 0 }}
+            exit={{ x: -300 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed inset-y-0 left-0 w-64 bg-gray-900 shadow-2xl"
           >
-            {cat}
-          </button>
-        ))}
-      </div>
+            <div className="p-6">
+              {/* Logo */}
+              <div className="flex items-center space-x-3 mb-8">
+                <div className="w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center">
+                  <span className="text-white text-lg font-bold">S</span>
+                </div>
+                <div>
+                  <h1 className="text-white text-xl font-bold">Speedie</h1>
+                  <p className="text-gray-400 text-sm">Vehicle Dashboard</p>
+                </div>
+              </div>
 
-      {/* Search */}
-      <div className="max-w-xl mx-auto mb-8">
-        <input
-          type="text"
-          placeholder="🔍 Search maintenance tips..."
-          className="w-full border border-yellow-300 rounded-lg px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-      </div>
-
-      {/* Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-        {filteredTips.map((tip, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.02 }}
-            className={clsx(
-              "rounded-xl border-l-4 shadow-md px-5 py-4 relative bg-white hover:shadow-lg transition cursor-pointer",
-              {
-                "border-yellow-500": tip.category === "General",
-                "border-green-500": tip.category === "Engine",
-                "border-blue-500": tip.category === "Fluids",
-                "border-purple-500": tip.category === "Comfort",
-                "border-red-500": tip.category === "Brakes",
-                "border-pink-500": tip.category === "Electrical",
-                "border-gray-500": tip.category === "Tires",
-                "border-cyan-500": tip.category === "Visibility",
-                "border-black": tip.category === "Safety",
-              }
-            )}
-          >
-            <div className="flex items-center justify-between gap-3">
-              <h2 className={"font-semibold text-lg"}>{tip.title}</h2>
+              {/* Navigation */}
+              <nav className="space-y-2">
+                {sidebarItems.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center space-x-4 px-4 py-3 rounded-lg text-sm transition-all duration-200 ${
+                      item.active
+                        ? 'bg-gray-700 text-white shadow-lg'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white hover:shadow-md'
+                    }`}
+                  >
+                    <Icon name={item.icon} className="w-5 h-5" />
+                    <span className="font-semibold">{item.label}</span>
+                  </Link>
+                ))}
+              </nav>
             </div>
-            <p className="mt-2 text-sm text-gray-700">{tip.description}</p>
           </motion.div>
-        ))}
+        </div>
+      )}
+
+      {/* Desktop Sidebar */}
+      <div className={`${sidebarOpen ? 'w-64' : 'w-16'} bg-gray-800 transition-all duration-300 flex-shrink-0 hidden lg:block`}>
+        <div className="p-6">
+          {/* Logo */}
+          <div className="flex items-center space-x-3 mb-8">
+            <div className="w-8 h-8 rounded bg-gray-700 flex items-center justify-center">
+              <span className="text-white text-sm font-bold">S</span>
+            </div>
+            {sidebarOpen && (
+              <div>
+                <h1 className="text-white text-lg font-semibold">Speedie</h1>
+                <p className="text-gray-400 text-xs">Vehicle Dashboard</p>
+              </div>
+            )}
+          </div>
+
+          {/* Navigation */}
+          <nav className="space-y-1">
+            {sidebarItems.map((item) => (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={`flex items-center space-x-3 px-3 py-2 rounded text-sm transition-colors ${
+                  item.active
+                    ? 'bg-gray-700 text-white'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                <Icon name={item.icon} className="w-4 h-4" />
+                {sidebarOpen && <span className="font-medium">{item.label}</span>}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        {/* Sidebar Toggle */}
+        <div className="absolute bottom-4 left-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 rounded bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-600 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+            </svg>
+          </button>
+        </div>
       </div>
-    </main>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Top Header */}
+        <header className="bg-white border-b border-gray-200 px-4 lg:px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              <div>
+                <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">Maintenance Tips</h2>
+                <p className="text-sm lg:text-base text-gray-600">Keep your vehicle in top condition with these maintenance tasks</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content Area */}
+        <main className="flex-1 p-4 lg:p-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-8 text-center">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Icon name="wrench" className="w-8 h-8 text-gray-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Maintenance Tips</h3>
+              <p className="text-gray-600 mb-8">Keep your vehicle in top condition with proper maintenance. This page will help you understand what maintenance tasks your vehicle needs and when to perform them.</p>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h4 className="text-lg font-medium text-gray-900 mb-4">Coming Soon</h4>
+                <p className="text-gray-600">We're working on comprehensive maintenance tips and scheduling features. Check back soon for detailed maintenance guides and reminders!</p>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
   );
 }
