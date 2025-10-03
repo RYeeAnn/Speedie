@@ -246,7 +246,7 @@ export default function MileagePage() {
               </button>
               <div>
                 <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">Mileage Tracker</h2>
-                <p className="text-sm lg:text-base text-gray-600">Track your vehicle's maintenance schedule based on mileage</p>
+                <p className="text-sm lg:text-base text-gray-600">Track your vehicle&apos;s maintenance schedule based on mileage</p>
               </div>
             </div>
           </div>
@@ -260,7 +260,7 @@ export default function MileagePage() {
                 <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <span className="text-2xl">🚗</span>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Let's get started</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Let&apos;s get started</h3>
                 <p className="text-gray-600 mb-8">Is your car brand new or used? This helps us provide accurate maintenance recommendations.</p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <button

@@ -2,15 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { allWarningLights, WarningLight } from "./allWarningLights";
 import { clsx } from "clsx";
 
-const severityColor = {
-    info: "text-blue-600",
-    warning: "text-amber-600",
-    critical: "text-red-600",
-};
 
 const Icon = ({ name, className = "w-5 h-5" }: { name: string; className?: string }) => {
   const icons = {
@@ -241,9 +237,11 @@ export default function WarningLightsPage() {
                   className="flex flex-col items-center p-4 border rounded-xl shadow-sm hover:shadow-md transition bg-white hover:bg-gray-50 group"
                 >
                   <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-gray-200 transition">
-                    <img
+                    <Image
                       src={light.image}
                       alt={light.name}
+                      width={40}
+                      height={40}
                       className="w-10 h-10 object-contain"
                     />
                   </div>
@@ -280,9 +278,11 @@ export default function WarningLightsPage() {
                 <div className="p-6">
                   <div className="flex flex-col items-center mb-6">
                     <div className="w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
-                      <img
+                      <Image
                         src={selectedLight.image}
                         alt={selectedLight.name}
+                        width={48}
+                        height={48}
                         className="w-12 h-12 object-contain"
                       />
                     </div>

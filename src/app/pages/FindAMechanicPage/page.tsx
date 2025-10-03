@@ -117,7 +117,7 @@ export default function FindAMechanicPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const cities = ["All", ...new Set(mechanics.map(m => m.city).filter(Boolean))];
+  const cities = ["All", ...new Set(mechanics.map(m => m.city).filter(Boolean))] as string[];
 
   const filteredMechanics = mechanics.filter(mechanic => {
     const matchesSearch = mechanic.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -273,7 +273,7 @@ export default function FindAMechanicPage() {
                 {cities.map(city => (
                   <button
                     key={city}
-                    onClick={() => setSelectedCity(city)}
+                    onClick={() => setSelectedCity(city || null)}
                     className={`px-4 py-2 rounded border text-sm font-medium transition whitespace-nowrap ${
                       selectedCity === city
                         ? "bg-gray-800 text-white border-gray-800"

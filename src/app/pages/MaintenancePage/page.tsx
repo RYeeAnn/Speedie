@@ -185,7 +185,7 @@ export default function MaintenancePage() {
               <p className="text-gray-600 mb-8">Keep your vehicle in top condition with proper maintenance. This page will help you understand what maintenance tasks your vehicle needs and when to perform them.</p>
               <div className="bg-gray-50 rounded-lg p-6">
                 <h4 className="text-lg font-medium text-gray-900 mb-4">Coming Soon</h4>
-                <p className="text-gray-600">We're working on comprehensive maintenance tips and scheduling features. Check back soon for detailed maintenance guides and reminders!</p>
+                <p className="text-gray-600">We&apos;re working on comprehensive maintenance tips and scheduling features. Check back soon for detailed maintenance guides and reminders!</p>
               </div>
             </div>
           </div>

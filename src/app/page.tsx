@@ -210,7 +210,7 @@ export default function Home() {
               </button>
               <div>
                 <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">Dashboard</h2>
-                <p className="text-sm lg:text-base text-gray-600">Welcome back! Here's what's happening with your vehicle.</p>
+                <p className="text-sm lg:text-base text-gray-600">Welcome back! Here&apos;s what&apos;s happening with your vehicle.</p>
               </div>
             </div>
             <div className="text-xs lg:text-sm text-gray-500 hidden sm:block">
@@ -235,7 +235,7 @@ export default function Home() {
               </div>
               <div className="p-6">
                 <p className="text-gray-600 mb-4">
-                  Don't ignore those dashboard lights! Our comprehensive database helps you understand what each warning means and how urgent it is.
+                  Don&apos;t ignore those dashboard lights! Our comprehensive database helps you understand what each warning means and how urgent it is.
                 </p>
                 <Link href="/pages/WarningLightsPage">
                   <button className="bg-gray-800 text-white px-4 py-2 rounded text-sm font-medium hover:bg-gray-700 transition-colors">
