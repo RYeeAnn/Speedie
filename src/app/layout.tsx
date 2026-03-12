@@ -13,8 +13,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Speedie - Vehicle Dashboard",
-  description: "Your comprehensive vehicle information dashboard. Identify warning lights, get maintenance tips, track mileage, and find trusted mechanics.",
+  title: "Speedie — Know Your Vehicle",
+  description:
+    "Speedie helps drivers understand dashboard warning lights, plan vehicle maintenance, track mileage, and find trusted mechanics — all for free. Built for every driver by Ryan Yee.",
+  keywords: [
+    "warning lights",
+    "dashboard lights",
+    "car maintenance",
+    "vehicle diagnostics",
+    "mileage tracker",
+    "find a mechanic",
+  ],
+  authors: [{ name: "Ryan Yee" }],
+  openGraph: {
+    title: "Speedie — Know Your Vehicle",
+    description:
+      "Instant clarity on dashboard warning lights. Free, clear, and built for every driver.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -24,9 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>
